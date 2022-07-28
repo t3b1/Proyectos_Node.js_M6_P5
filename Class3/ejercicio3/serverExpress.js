@@ -7,28 +7,34 @@ app.use(express.json());
 app.use(express.static('public'))
 
 app.get('/crear', (req, res) => {
-    fs.writeFile('public/' + req.query.archivo.trim(), req.query.contenido.trim(), 'utf-8', function () {
+    const archivo = req.query.archivo.trim(),
+          contenido = req.query.contenido.trim();
+    fs.writeFile(`public/${archivo}.txt`, contenido, 'utf-8', function () {
             res.send("creacion exitosa")
         })
     })
 
   
 app.get('/leer', (req, res) => {
-fs.readFile(`public/` + req.query.leerarchivo.trim(), function (err,data) {
-    res.send(data);
+    const leerFile = req.query.leerarchivo.trim()
+    fs.readFile(`public/${leerFile}.txt` , function (err,data) {
+        res.send(data);
 })
     
 })
 
 app.get('/rename', (req, res) => {
-    fs.rename('public/'+req.query.nombrearchivo.trim(), 'public/'+req.query.newnombre.trim(), function(){
+    const nombreFile = req.query.nombrearchivo.trim(),
+          newFile = req.query.newnombre.trim();
+    fs.rename(`public/${nombreFile}.txt`, `public/${newFile}.txt`, function(){
         res.send("Archivo renombrado");
     })
 })
 
 
 app.get('/eliminar', (req, res) => {
-    fs.unlink('public/' + req.query.borrararchivo.trim(), function(){
+    const eliminarFile = req.query.borrararchivo.trim();
+    fs.unlink(`public/${eliminarFile}.txt`, function(){
         res.send("Archivo eliminado");
     });
 })
